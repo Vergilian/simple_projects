@@ -35,7 +35,9 @@
     "Python.db.executor": "Run",
     "Python.keyboards.executor": "Run",
     "Python.main_3.executor": "Run",
+    "Python.not_db.executor": "Run",
     "Python.test.executor": "Run",
+    "Python.test1.db.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "C:/Users/Vergilian/PythonProject/UU"
@@ -43,6 +45,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Vergilian\PythonProject\Bot_Project\Test_1\files" />
       <recent name="C:\Users\Vergilian\PythonProject\Bot_Project\Test_1" />
       <recent name="C:\Users\Vergilian\PythonProject\Bot_Project\old" />
     </key>
