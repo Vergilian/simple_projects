@@ -36,4 +36,5 @@ async def delete_user(user_id: int):
         if user["id"] == user_id:
             del user[i]
             return {"detail": "Задача удалена"}
+        
     raise HTTPException(status_code=404, detail="Задача не найдена")
