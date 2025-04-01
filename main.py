@@ -26,3 +26,4 @@ async def update_users(user_id: int, username: str, age:int) -> str:
 async def delete_user(user_id:str) -> str:
     users.pop(user_id)
     return f"Message with {user_id} was deleted!"
+
