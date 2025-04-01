@@ -1,13 +1,3 @@
-# created by virtualenv automatically
-*
-venv/
-.env
-__pycache__/
-# Логи и временные файлы
-*.log
-*.tmp
-# Конфигурационные файлы IDE
-.idea/
-*.iml
 # Доп.файлы
 /theory
+.idea
