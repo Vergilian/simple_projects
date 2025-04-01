@@ -1,8 +1,15 @@
+from http.client import HTTPException
+
 from fastapi import FastAPI
 
 app = FastAPI()
 
 users = {'1': "Имя: Example, возраст:18"}
+
+
+@app.get("/")
+async def read_root():
+    return {"message": "Welcome to the API!"}
 
 
 @app.get('/users')
@@ -18,12 +25,15 @@ async def create_user(username: str, age: int) -> str:
 
 
 @app.put("/user/{user_id}/{username}/{age}")
-async def update_users(user_id: int, username: str, age:int) -> str:
+async def update_users(user_id: int, username: str, age: int) -> str:
     users[user_id] = f"Имя: {username}, возраст: {age}"
     return f"user {user_id} id updated!"
 
-@app.delete("/user/{user_id}")
-async def delete_user(user_id:str) -> str:
-    users.pop(user_id)
-    return f"Message with {user_id} was deleted!"
 
+@app.delete("/user/{user_id}")
+async def delete_user(user_id: int):
+    for i, user in enumerate(users):
+        if user["id"] == user_id:
+            del user[i]
+            return {"detail": "Задача удалена"}
+    raise HTTPException(status_code=404, detail="Задача не найдена")
