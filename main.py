@@ -26,15 +26,16 @@ async def create_user(username: str, age: int) -> str:
 
 @app.put("/user/{user_id}/{username}/{age}")
 async def update_users(user_id: int, username: str, age: int) -> str:
-    users[user_id] = f"Имя: {username}, возраст: {age}"
-    return f"user {user_id} id updated!"
-
+    if user_id in users:
+        users[user_id] = f"Имя: {username}, возраст: {age}"
+        return f"user {user_id} id updated!"
+    else:
+        raise HTTPException(status_code=404, detail="Пользователь не найден")
 
 @app.delete("/user/{user_id}")
 async def delete_user(user_id: int):
     for i, user in enumerate(users):
         if user["id"] == user_id:
             del user[i]
-            return {"detail": "Задача удалена"}
-        
-    raise HTTPException(status_code=404, detail="Задача не найдена")
+            return {"detail": "Пользователь удален"}
+    raise HTTPException(status_code=404, detail="Пользователь не найдена")
