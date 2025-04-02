@@ -1,4 +1,4 @@
-from fastapi import FastAPI, status, HTTPException, Body, Request, Form
+from fastapi import FastAPI, HTTPException, Request, Form
 from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from fastapi.templating import Jinja2Templates
@@ -6,57 +6,52 @@ from fastapi.templating import Jinja2Templates
 app = FastAPI()
 templates = Jinja2Templates(directory="templates")
 
-messages_db = []
+users = []
 
 
-class Message(BaseModel):
+class User(BaseModel):
     id: int = None
-    text: str
+    username: str
+    age: int
 
 
 @app.get("/")
-def get_all_messages(request: Request) -> HTMLResponse:
-    return templates.TemplateResponse("message.html", {"request": request, "messages": messages_db})
+def get_users(request: Request) -> HTMLResponse:
+    return templates.TemplateResponse("users.html", {"request": request, "users": users})
 
 
-@app.get(path="/message/{message_id}", response_model=Message)
-def get_message(request: Request, message_id: int) -> HTMLResponse:
-    try:
-        return templates.TemplateResponse("message.html", {"request": request, "message": messages_db[message_id]})
-    except IndexError:
-        raise HTTPException(status_code=404, detail="Message not found")
-
-
-@app.post("/", status_code=status.HTTP_201_CREATED)
-def create_message(request: Request, message: str = Form()) -> HTMLResponse:
-    if messages_db:
-        message_id = max(messages_db, key= lambda m: m.id).id + 1
+@app.get(path="/users/{user_id}", response_model=User)
+def get_all_users(request: Request, user_id: int) -> HTMLResponse:
+    user = next((u for u in users if u.id == user_id), None)
+    if user is not None:
+        return templates.TemplateResponse("users.html", {"request": request, "user": user})
     else:
-        message_id = 0
-    messages_db.append(Message(id = message_id, text = message))
-    return templates.TemplateResponse("message.html", {"request": request, "messages": messages_db})
+        raise HTTPException(status_code=404, detail="User not found")
 
 
-@app.put("/message/{message_id}")
-def update_message(message_id: int, message: str = Body()) -> str:
-    try:
-        edit_message = messages_db[message_id]
-        edit_message.text = message
-        return "Message updated!"
-    except IndexError:
-        raise HTTPException(status_code=404, detail="Message not found")
+@app.post("/user", response_model=User)
+def create_user(request:Request, username: str = Form(...), age: int= Form(...)) -> HTMLResponse:
+    new_id = users[-1].id + 1 if users else 1
+    new_user = User(id=new_id, username=username, age=age)
+    users.append(new_user)
+    return templates.TemplateResponse("users.html", {"request": request, "users": users})
 
 
-@app.delete("/message/{message_id}")
-def delete_message(message_id: int) -> str:
-    try:
-        messages_db.pop(message_id)
-        return f"Message ID= {message_id} deleted!"
-    except IndexError:
-        raise HTTPException(status_code=404, detail="Message not found")
+@app.put("/user/{user_id}/{username}/{age}", response_model=User)
+def update_users(user_id: int, username: str, age=int):
+    for user in users:
+        if user.id == user_id:
+            user.username = username
+            user.age = age
+            return user
+    raise HTTPException(status_code=404, detail="User not found")
 
 
-@app.delete("/")
-def delete_all_message() -> str:
-    messages_db.clear()
-    return "All messages deleted!"
+@app.delete("/user/{user_id}", response_model=User)
+def delete_user(user_id: int):
+    for index, user in enumerate(users):
+        if user.id == user_id:
+            return users.pop(index)
+    raise HTTPException(status_code=404, detail="User not found")
+
+# python -m uvicorn shablon:app
