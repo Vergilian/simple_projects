@@ -12,6 +12,3 @@ async def welcome() -> dict:
 app.include_router(user.router)
 app.include_router(task.router)
 
-# python -m uvicorn app.main:app --reload
-# alembic -c alembic_first.ini revision --autogenerate -m "Initial migration"
-# alembic -c alembic_first.ini upgrade head
