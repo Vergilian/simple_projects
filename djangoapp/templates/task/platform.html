@@ -1,0 +1,16 @@
+{% extends 'task/main.html' %}
+
+{% block content %}
+    <h2>Платформа</h2>
+    {% if platform_menu %}
+        <p>Навигация по платформе:</p>
+        <ul>
+            {% for item in platform_menu %}
+                <li>{{ item|capfirst }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Разделов пока нет.</p>
+    {% endif %}
+    <a href="{% url 'home' %}"><button>Вернуться обратно</button></a>
+{% endblock %}
