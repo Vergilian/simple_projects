@@ -1,0 +1,35 @@
+{% extends 'task/main.html' %}
+
+{% block content %}
+<h2>Добро пожаловать, {{ buyer.name }}!</h2>
+<p>Ваш возраст: {{ buyer.age }}</p>
+<p>Ваш баланс: {{ buyer.balance }}₽</p>
+
+<h3>Ваши игры:</h3>
+<ul>
+    {% for game in buyer.games.all %}
+        <li>{{ game.title }} — {{ game.description }}</li>
+    {% empty %}
+        <li>У вас пока нет игр.</li>
+    {% endfor %}
+</ul>
+
+<hr>
+
+<h3>Игры в корзине:</h3>
+<ul>
+    {% if cart_items %}
+        {% for item in cart_items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+        <form action="{% url 'clear_cart' %}" method="post">
+            {% csrf_token %}
+            <button type="submit">Очистить корзину</button>
+        </form>
+    {% else %}
+        <li>Корзина пуста.</li>
+    {% endif %}
+</ul>
+
+<a href="{% url 'platform' %}"><button>На главную</button></a>
+{% endblock %}

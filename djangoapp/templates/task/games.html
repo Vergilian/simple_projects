@@ -5,12 +5,16 @@
 <ul>
     {% for game in games %}
         <li>
-            {{ game }}
+            {{ game.title }} | {{ game.description }}. Стоимость: {{ game.cost }}₽
             <a href="{% url 'add_to_cart' game %}">
-                <button>Добавить</button>
+                <button>Купить</button>
             </a>
         </li>
     {% endfor %}
 </ul>
-    <a href="{% url 'home' %}"><button>Вернуться обратно</button></a>
+    {% if request.session.buyer_name %}
+    <a href="{% url 'profile' username=request.session.buyer_name %}">
+        <button>Вернуться в профиль</button>
+    </a>
+{% endif %}
 {% endblock %}

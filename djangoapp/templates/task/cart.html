@@ -2,17 +2,62 @@
 
 {% block content %}
     <h2 class="section-title">Корзина</h2>
+
     {% if cart_items %}
         <ul>
-            {% for item in cart_items %}
-                <li>{{ item }}</li>
+            {% for name, qty in cart_items.items %}
+                <li>
+                    {{ name }} — {{ qty }} шт.
+                    <button class="change-qty" data-name="{{ name }}" data-action="increase">+</button>
+                    <button class="change-qty" data-name="{{ name }}" data-action="decrease">-</button>
+                </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'clear_cart' %}">
-            <button>Очистить корзину</button>
-        </a>
+
+        <button id="clear-cart-btn">Очистить корзину</button>
     {% else %}
         <p>Корзина пуста.</p>
     {% endif %}
-    <a href="{% url 'home' %}"><button>Вернуться обратно</button></a>
+
+    {% if buyer %}
+        <a href="{% url 'profile' username=buyer.name %}">
+            <button>Вернуться в профиль</button>
+        </a>
+    {% endif %}
+
+    <script>
+        // Кнопка очистки корзины (AJAX)
+        document.getElementById('clear-cart-btn')?.addEventListener('click', function () {
+            fetch("{% url 'clear_cart' %}")
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        location.reload(); // Перезагрузим только корзину
+                    }
+                });
+        });
+
+        // Кнопки +/- для изменения количества
+        document.querySelectorAll('.change-qty').forEach(button => {
+            button.addEventListener('click', () => {
+                const gameName = button.dataset.name;
+                const action = button.dataset.action;
+
+                fetch("{% url 'update_cart_quantity' %}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: `game_name=${gameName}&action=${action}`
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'ok') {
+                        location.reload(); // Можно заменить на обновление только нужного элемента
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

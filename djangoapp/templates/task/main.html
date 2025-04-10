@@ -51,11 +51,39 @@
     </nav>
 </header>
 
+{% if request.session.buyer_name %}
+    <p style="text-align: center; color: white; margin-top: 0.5rem;">
+        Здравствуйте, {{ request.session.buyer_name }}!
+    </p>
+{% endif %}
+
 <main>
     {% block content %}
-    <p>Здесь будет контент страницы.</p>
+    <h2>Регистрация пользователя</h2>
+    <form method="POST" action="{% url 'registration' %}">
+        {% csrf_token %}
+        <label>Имя:</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label>Email:</label><br>
+        <input type="email" name="email"><br><br>
+
+        <label>Возраст:</label><br>
+        <input type="number" name="age"><br><br>
+
+        <label>Баланс:</label><br>
+        <input type="number" step="0.01" name="balance"><br><br>
+
+        <label>Сообщение:</label><br>
+        <textarea name="message"></textarea><br><br>
+
+        <label><input type="checkbox" name="subscribe"> Подписаться на новости</label><br><br>
+
+        <button type="submit">Зарегистрироваться</button>
+    </form>
     {% endblock %}
 </main>
+
 
 <footer>
     <p>&copy; {{ title }} | Все права защищены</p>
