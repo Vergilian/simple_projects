@@ -4,7 +4,7 @@
 <h2 class="section-title">Список игр</h2>
 <ul>
     {% for game in games %}
-        <li>
+        <li class="game-item">
             {{ game.title }} | {{ game.description }}. Стоимость: {{ game.cost }}₽
             <a href="{% url 'add_to_cart' game %}">
                 <button>Купить</button>
@@ -12,9 +12,17 @@
         </li>
     {% endfor %}
 </ul>
+
     {% if request.session.buyer_name %}
     <a href="{% url 'profile' username=request.session.buyer_name %}">
         <button>Вернуться в профиль</button>
     </a>
 {% endif %}
 {% endblock %}
+
+<style>
+    /* Убедитесь, что .game-item точно нацелен на элементы <li> */
+    ul li.game-item {
+        margin-bottom: 5px; /* отступ между элементами */
+    }
+</style>

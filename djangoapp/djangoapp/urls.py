@@ -23,22 +23,22 @@ from task.views import games
 from task.views import cart
 from task.views import add_to_cart
 from task.views import clear_cart
-# from task.views import register
 from task.views import profile
 from task.views import registration
 from task.views import update_cart_quantity
+from task.views import news
 
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('platform/', platform, name='platform'),
+    path('platform/news/', news, name='news'),
     path('games/', games, name='games'),
     path('cart/', cart, name='cart'),
     path('', home, name='home'),
     path('add/<str:game_name>/', add_to_cart, name='add_to_cart'),
     path('clear-cart/', clear_cart, name='clear_cart'),
-    # path('register/', register, name='register'),
     path('profile/<str:username>/', profile, name='profile'),
     path('registration/', registration, name='registration'),
     path('update-cart/', update_cart_quantity, name='update_cart_quantity'),

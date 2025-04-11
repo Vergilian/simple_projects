@@ -1,0 +1,40 @@
+{% extends 'task/main.html' %}
+{% block pagename %}<h1>Новости</h1>{% endblock %}
+{% block menu %}{{ block.super }}{% endblock %}
+{% block content %}
+    <hr>
+    {% for new in page_obj %}
+        <h2>{{ new.title }}</h2>
+        <br>
+        {{ new.content }}
+        <br>
+        <small style="float: right; margin-right: 20px;">{{ new.date }}</small>
+        <hr>
+    {% endfor %}
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; Первая</a>
+                <a href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            {% endif %}
+
+            <span class="current">
+                Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Следующая</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a>
+            {% endif %}
+        </span>
+
+    </div>
+    <div style="margin-top: 20px;">
+        {% if request.session.buyer_name %}
+        <a href="{% url 'profile' username=request.session.buyer_name %}">
+        <button>Вернуться в профиль</button>
+    </a>
+        {% endif %}
+    </div>
+{% endblock %}

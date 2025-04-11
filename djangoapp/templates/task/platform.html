@@ -12,6 +12,8 @@
     {% else %}
         <p>Разделов пока нет.</p>
     {% endif %}
+
+
 {% if request.session.buyer_name %}
     <a href="{% url 'profile' username=request.session.buyer_name %}">
         <button>Вернуться в профиль</button>

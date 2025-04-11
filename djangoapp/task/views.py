@@ -1,6 +1,7 @@
+from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
-from .models import Game, Buyer
+from .models import Game, Buyer, News
 
 # Create your views here.
 def get_main_menu():
@@ -8,6 +9,7 @@ def get_main_menu():
         {'title': 'Платформа', 'url_name': 'platform'},
         {'title': 'Игры', 'url_name': 'games'},
         {'title': 'Корзина', 'url_name': 'cart'},
+        {'title': 'Новости', 'url_name': 'news'},
     ]
 def home(request):
     context = {
@@ -28,6 +30,7 @@ def platform(request):
         'main_menu': get_main_menu(),
         'platform_menu': ['главная', 'магазин', 'корзина'],
         'buyer': buyer,
+        'news': News.objects.all().order_by('-date')
     }
     return render(request, 'task/platform.html', context)
 def games(request):
@@ -65,7 +68,11 @@ def add_to_cart(request, game_name):
     return redirect('games')
 def clear_cart(request):
     request.session['cart'] = {}
-    return JsonResponse({'status': 'ok'})
+    buyer_name = request.session.get('buyer_name')
+    if buyer_name:
+        return redirect('profile', username=buyer_name)
+    else:
+        return redirect('home')  # Если покупатель не найден, перенаправляем на главную страницу
 
 def register(request):
     if request.method == 'POST':
@@ -144,3 +151,10 @@ def update_cart_quantity(request):
 
     request.session['cart'] = cart
     return JsonResponse({'status': 'ok'})
+
+def news(request):
+    posts = News.objects.all().order_by('-date')
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request,'task/news.html',{'page_obj': page_obj})

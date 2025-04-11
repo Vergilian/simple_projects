@@ -36,6 +36,36 @@
             text-align: center;
             margin-top: 3rem;
         }
+        label {
+            display: block;  /* Сначала делают label блочным элементом, чтобы каждый был на новой строке */
+            margin-bottom: 0.5rem; /* Отступ снизу у label */
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="number"], textarea {
+            width: 100%;
+            padding: 0.8rem; /* Отступ внутри поля */
+            margin-bottom: 1rem;  /* Отступ снизу для каждого поля */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        textarea {
+            height: 100px;  /* Устанавливаем высоту текстового поля */
+        }
+
+        button {
+            padding: 5px 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 5px; /* добавляет отступ сверху */
+        }
+
+        ul li {
+            margin-bottom: 10px; /* добавляет отступ между элементами списка */
+        }
     </style>
 </head>
 <body>
@@ -52,8 +82,8 @@
 </header>
 
 {% if request.session.buyer_name %}
-    <p style="text-align: center; color: white; margin-top: 0.5rem;">
-        Здравствуйте, {{ request.session.buyer_name }}!
+    <p style="text-align: center; color: black; margin-top: 0.5rem;">
+        Пользователь <strong>{{ request.session.buyer_name }}</strong> сейчас управляет галактикой!
     </p>
 {% endif %}
 
