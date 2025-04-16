@@ -10,7 +10,7 @@ class User(models.Model):
 
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['uesrname']
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
         return self.email
